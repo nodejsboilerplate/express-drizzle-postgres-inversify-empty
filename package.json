@@ -14,7 +14,7 @@
   ],
   "scripts": {
     "dev": "tsx --watch ./src/index.ts",
-    "build": "pnpm --filter emails build && tsdown",
+    "build": "pnpm tsdown",
     "format": "prettier --write \"**/*.{ts,md,json,js,yaml}\"",
     "gen:docs": "NODE_OPTIONS='--max-old-space-size=4096' typedoc",
     "check:lint": "eslint . --cache --cache-location node_modules/.cache/eslint/ --max-warnings 1000",
@@ -79,7 +79,6 @@
     "express": "^5.2.1",
     "dotenv": "^17.4.2",
     "@prometheus-io/client": "^0.16.1",
-    "@repo/emails": "workspace:*",
     "bcryptjs": "^3.0.3",
     "cookie-parser": "^1.4.7",
     "cors": "^2.8.6",

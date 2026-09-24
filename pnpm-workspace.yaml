@@ -1,5 +1,3 @@
-packages:
-  - emails
 allowBuilds:
   cpu-features: true
   esbuild: true

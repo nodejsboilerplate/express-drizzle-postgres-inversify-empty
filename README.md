@@ -2,7 +2,7 @@
 
 **Production-ready JavaScript/TypeScript boilerplate.**
 
-Nebula ships with authentication, observability, background infrastructure, and developer tooling pre-wired, so you can skip the setup grind and start building features on day one.
+Nebula ships with a Postgres + Redis + Drizzle stack, observability, and developer tooling pre-wired, so you can skip the setup grind and start building features on day one. This is the **empty** variant - no auth, email, or SMS modules included, just the core plumbing.
 
 > **Note:** This boilerplate is **InversifyJS IoC-controlled** - see `container.ts`.
 
@@ -12,7 +12,6 @@ Nebula ships with authentication, observability, background infrastructure, and 
 
 - [Stack Overview](#stack-overview)
 - [Dependency Injection Container](#dependency-injection-container)
-- [Email Templates](#email-templates)
 - [Getting Started](#getting-started)
 - [Environment Setup](#environment-setup)
 - [Database Commands](#database-commands)
@@ -35,9 +34,6 @@ Nebula ships with authentication, observability, background infrastructure, and 
 | Dependency Injection     | InversifyJS                                          |
 | Cache / Queue / Sessions | Redis                                                |
 | Validation               | Zod                                                  |
-| Auth                     | JWT + Cookies + Google OAuth                         |
-| Email Delivery           | Resend + `@repo/emails` (react-email)                |
-| SMS                      | Twilio                                               |
 | Logging                  | Pino + request logger middleware, Winston (for Loki) |
 | Rate Limiting            | express-rate-limit + Redis-backed store              |
 | Testing                  | Vitest + Supertest                                   |
@@ -50,16 +46,6 @@ Nebula ships with authentication, observability, background infrastructure, and 
 ## Dependency Injection Container
 
 Dependencies are wired via **InversifyJS**, configured in `container.ts`.
-
----
-
-## Email Templates
-
-`@repo/emails` ships with **4 pre-built react-email templates, designed off real Dribbble references** - not the usual bare-bones "Welcome to X" placeholder. Ready to send from day one:
-
-- signup confirmation
-- Password reset / OTP
-- Order confirmation
 
 ---
 
@@ -147,20 +133,29 @@ cp .env.example .env
 
 **Key values include:**
 
-| Variable                    | Purpose                          |
-| --------------------------- | -------------------------------- |
-| `PORT`                      | App server port                  |
-| `NODE_ENV`                  | Runtime environment              |
-| `DATABASE_URL`              | PostgreSQL connection string     |
-| `REDIS_HOST` / `REDIS_PORT` | Redis connection                 |
-| `JWT_ACCESS_TOKEN_SECRET`   | JWT access token signing secret  |
-| `JWT_REFRESH_TOKEN_SECRET`  | JWT refresh token signing secret |
-| `RESEND_API_KEY`            | Email delivery via Resend        |
-| `GOOGLE_CLIENT_ID`          | Google OAuth                     |
-| `GOOGLE_CLIENT_SECRET`      | Google OAuth                     |
-| `GOOGLE_AUTH_REDIRECT_URI`  | Google OAuth redirect            |
-| `TWILIO_ACCOUNT_SID`        | SMS via Twilio                   |
-| `TWILIO_AUTH_TOKEN`         | SMS via Twilio                   |
+```dotenv
+PORT=3000
+NODE_ENV=development
+
+DATABASE_URL="postgresql://postgres:postgres@localhost:5432/postgres"
+# DATABASE_URL="postgresql://postgres:postgres@nebula-postgres:5432/postgres" #docker-compose
+
+REDIS_USERNAME=default
+REDIS_PASSWORD=default
+REDIS_HOST=localhost
+# REDIS_HOST=nebula-redis-server #docker-compose
+REDIS_PORT=6379
+```
+
+| Variable         | Purpose                      |
+| ---------------- | ---------------------------- |
+| `PORT`           | App server port              |
+| `NODE_ENV`       | Runtime environment          |
+| `DATABASE_URL`   | PostgreSQL connection string |
+| `REDIS_USERNAME` | Redis auth username          |
+| `REDIS_PASSWORD` | Redis auth password          |
+| `REDIS_HOST`     | Redis connection host        |
+| `REDIS_PORT`     | Redis connection port        |
 
 ---
 
@@ -255,7 +250,6 @@ This boilerplate wires Prometheus and Grafana together, so you get metrics and l
 
 ```bash
 pnpm install
-pnpm --filter emails run build:package
 cp .env.example .env
 pnpm dev
 ```
