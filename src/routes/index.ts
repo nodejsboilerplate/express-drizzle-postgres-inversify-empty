@@ -12,7 +12,6 @@ export class ApiRouter implements IRouter {
   ) {
     this.router = Router();
     // this.exampleRouter.createRouters();
-
   }
 
   createRouters(): void {

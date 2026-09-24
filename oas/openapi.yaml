@@ -30,9 +30,7 @@ servers:
     description: Production server (placeholder — inferred, confirm real deployment URL)
 
 components:
-
   schemas:
- 
     ApiResponse:
       type: object
       required: [status, message, data, success, title]
@@ -121,7 +119,6 @@ components:
             status: 500
             success: false
             errors: []
-
 
 paths:
   /health:
